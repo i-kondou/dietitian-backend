@@ -45,3 +45,5 @@ steps:
     - --ingress=all
     - --allow-unauthenticated
     - --update-secrets=GEMINI_API_KEY=dietitian__gemini_api_key:latest
+
+## test

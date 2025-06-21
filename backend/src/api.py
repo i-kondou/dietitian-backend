@@ -1,6 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import Union
+from fastapi import FastAPI, UploadFile, File
+from pydantic import BaseModel, Field
 
 # FastAPIのインスタンスを作成
 app = FastAPI()
@@ -9,43 +8,55 @@ app = FastAPI()
 # POSTリクエストで受け取るデータの型を定義
 
 
-class Item(BaseModel):
+class NutritionResponse(BaseModel):
     """
-    Itemモデルは、POSTリクエストで受け取るデータの型を定義します。
-    - name: アイテムの名前
-    - price: アイテムの価格
-    - description: アイテムの説明（オプション）
-    - tax: アイテムの税金（オプション）
+    食品の栄養成分を表すモデル。
+    Attributes:
+        menu (str): 食品名
+        calorie (float): カロリー
+        protein (float): タンパク質
+        fat (float): 脂質
+        carbohydrate (float): 炭水化物
+        dietary_fiber (float): 食物繊維
+        vitamin (float): ビタミン
+        mineral (float): ミネラル
+        sodium (float): ナトリウム
     """
-    name: str
-    price: float
-    description: Union[str, None] = None
-    tax: Union[float, None] = None
+    menu: str = Field(..., description="食品名")
+    calorie: float = Field(..., description="カロリー")
+    protein: float = Field(..., description="タンパク質")
+    fat: float = Field(..., description="脂質")
+    carbohydrate: float = Field(..., description="炭水化物")
+    dietary_fiber: float = Field(..., description="食物繊維")
+    vitamin: float = Field(..., description="ビタミン")
+    mineral: float = Field(..., description="ミネラル")
+    sodium: float = Field(..., description="ナトリウム")
 
 
 # --- APIエンドポイントの定義 ---
 
-@app.get("/")
-def read_root() -> dict:
-    """
-    ルートエンドポイント。サーバーが起動しているかを確認できます。
-    """
-    return {"message": "Hello, FastAPI World!"}
+@app.post("/", response_model=NutritionResponse)
+def nutrition_process_mock(file: UploadFile = File(...)) -> NutritionResponse:  # noqa: B008
+    """Mock API endpoint to process a file and return nutrition information.
 
+    Args:
+        file (UploadFile): アップロードされたファイル
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None) -> dict:
-    """
-    パスパラメータ(item_id)と、オプショナルなクエリパラメータ(q)を受け取ります。
-    例: /items/5?q=somequery
-    """
-    return {"item_id": item_id, "q": q}
+    Returns:
+        NutritionResponse: 栄養成分の情報を含むレスポンス
 
+    """
+    if not file:
+        raise ValueError()
 
-@app.post("/items/")
-def create_item(item: Item) -> Item:
-    """
-    リクエストボディとしてItemデータを受け取り、それをそのまま返します。
-    データのバリデーションはPydanticモデルによって自動的に行われます。
-    """
-    return item
+    return NutritionResponse(
+        menu="Example Food",
+        calorie=100.0,
+        protein=5.0,
+        fat=2.0,
+        carbohydrate=20.0,
+        dietary_fiber=3.0,
+        vitamin=1.0,
+        mineral=0.5,
+        sodium=0.1
+    )

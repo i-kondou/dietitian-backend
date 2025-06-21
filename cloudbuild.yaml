@@ -1,6 +1,5 @@
 substitutions:
   _REGION: 'us-central1'
-  _REPO_NAME: 'dietitian-backend'
   _CONTAINER: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/backend/${REPO_NAME}:${SHORT_SHA}'
   _SERVICE_NAME: '${REPO_NAME//_/-}--${BRANCH_NAME:0:4}'
 options:

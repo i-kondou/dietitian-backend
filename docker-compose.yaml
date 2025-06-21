@@ -1,10 +1,13 @@
-version: '3'
 services:
   backend:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile.dev
-    volumes:
-      - ./backend:/app
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dietitian-backend
     ports:
-      - 8000:8000
+      - "8080:8080"
+    volumes:
+      - ./backend/src:/workspace/src
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    restart: unless-stopped

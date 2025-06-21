@@ -1,0 +1,52 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "dietitian",
+  "runServices": ["dietitian"],
+  "mounts": [
+    {
+      "type": "volume",
+      "source": "uv-cache",
+      "target": "/home/vscode/.cache/uv"
+    },
+    {
+      "type": "volume",
+      "source": "pyyright-cache",
+      "target": "/home/vscode/.cache/pyright-python"
+    },
+    {
+      "type": "volume",
+      "source": "venv-cache",
+      "target": "${containerWorkspaceFolder}/.venv"
+    },
+    {
+      "type": "bind",
+      "source": "${env:HOME}/.ssh",
+      "target": "/home/vscode/.ssh"
+    }
+  ],
+  "workspaceFolder": "/workspace",
+  "postAttachCommand": "sudo chown -R vscode /home/vscode/.cache/uv /home/vscode/.cache/pyright-python ${containerWorkspaceFolder}/.venv && uv venv --allow-existing .venv && uv sync && uv pip install -e '.[dev]'",
+  "postStartCommand": "echo 'export PATH=\"/workspace/.venv/bin:$PATH\"' >> ~/.bashrc",
+  "remoteUser": "vscode",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "git.openRepositoryInParentFolders": "always",
+        "python.defaultInterpreterPath": "/workspace/.venv/bin/python"
+      },
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-pull-request-github",
+        "ms-vsliveshare.vsliveshare",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "jebbs.plantuml"
+      ]
+    }
+  }
+}

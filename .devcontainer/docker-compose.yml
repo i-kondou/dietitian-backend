@@ -1,0 +1,10 @@
+services:
+  dietitian:
+    hostname: dietitian
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    user: vscode
+    command: /bin/sh -c "while sleep infinity; do :; done"
+    volumes:
+      - ..:/workspace:cached

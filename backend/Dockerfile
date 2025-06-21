@@ -18,7 +18,8 @@ COPY pyproject.toml uv.lock README.md /workspace/
 RUN uv sync --frozen --python-preference=system
 
 COPY src/ /workspace/src/
-RUN uv pip install --system -e .
+RUN uv pip install --system -e . \
+&& uv pip install -qU langchain-google-genai
 
 EXPOSE 8080
 

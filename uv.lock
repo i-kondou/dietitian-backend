@@ -192,6 +192,7 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "firebase-admin" },
+    { name = "google-cloud-firestore" },
     { name = "google-generativeai" },
     { name = "jinja2" },
     { name = "langchain-google-genai" },
@@ -212,6 +213,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.12" },
     { name = "firebase-admin", specifier = ">=6.9.0" },
+    { name = "google-cloud-firestore", specifier = ">=2.21.0" },
     { name = "google-generativeai", specifier = ">=0.8.5" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "langchain-google-genai", specifier = ">=2.0.10" },

@@ -55,6 +55,8 @@ class NutritionResponse(BaseModel):
     vitamin: float = Field(..., description="ビタミン")
     mineral: float = Field(..., description="ミネラル")
     sodium: float = Field(..., description="ナトリウム")
+    advice_message: str = Field(..., description="アドバイスメッセージ",
+                                default="This is a mock response. Please implement actual logic.")
 
 
 # --- APIエンドポイントの定義 ---
@@ -82,7 +84,8 @@ def nutrition_process_mock(file: UploadFile = File(...)) -> NutritionResponse:  
         dietary_fiber=3.0,
         vitamin=1.0,
         mineral=0.5,
-        sodium=0.1
+        sodium=0.1,
+        advice_message="This is a mock response. Please implement actual logic."
     )
 
 

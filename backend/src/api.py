@@ -1,8 +1,11 @@
+from src.routers import dummy
 from fastapi import FastAPI
 # import firebase_admin
+# from dotenv import load_dotenv
 # from firebase_admin.credentials import Certificate
 
-from src.routers import dummy
+# load_dotenv()
+
 
 app = FastAPI()
 

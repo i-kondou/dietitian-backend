@@ -91,4 +91,4 @@ desktop.ini
 
 *.egg-info
 
-classifier/
+*-firebase-adminsdk-*.json

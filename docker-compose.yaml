@@ -10,4 +10,5 @@ services:
       - ./backend/src:/workspace/src
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - FIREBASE_ADMINSDK_JSON=${FIREBASE_ADMINSDK_JSON}
     restart: unless-stopped

@@ -45,4 +45,4 @@ steps:
     - --ingress=all
     - --allow-unauthenticated
     - --update-secrets=GEMINI_API_KEY=dietitian__gemini_api_key:latest
-    - --update-secrets=/firebase-adminsdk.json=dietitian__firebase_adminsdk_json:latest
+    - --update-secrets=/secrets/firebase-adminsdk.json=dietitian__firebase_adminsdk_json:latest

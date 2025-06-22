@@ -8,5 +8,5 @@ app = FastAPI()
 
 app.include_router(dummy.router, prefix="/dummy", tags=["dummy"])
 
-cred = Certificate("")
+cred = Certificate("path/to/your/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)

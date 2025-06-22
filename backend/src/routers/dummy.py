@@ -59,7 +59,7 @@ class NutritionResponse(BaseModel):
 
 # --- APIエンドポイントの定義 ---
 
-@router.post("/", response_model=NutritionResponse)
+@router.post("/nutrition", response_model=NutritionResponse)
 def nutrition_process_mock(file: UploadFile = File(...)) -> NutritionResponse:  # noqa: B008
     """Mock API endpoint to process a file and return nutrition information.
 
@@ -103,7 +103,7 @@ def user_register(user: User) -> User:
     return user
 
 
-@router.post("/user/info", response_model=UserInfo)
+@router.post("/user/update", response_model=UserInfo)
 def user_info_register(user_info: UserInfo) -> UserInfo:
     """Register user information.
 

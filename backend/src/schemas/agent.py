@@ -2,6 +2,7 @@ from fastapi import File, UploadFile
 from pydantic import BaseModel, Field
 
 from src.core.enums import Sex
+
 class AgentRequest(BaseModel):
     """エージェントへのリクエスト用"""
     height: float = Field(...)

@@ -1,6 +1,6 @@
 import base64
 from dotenv import load_dotenv
-from fastapi import APIRouter, File, HTTPException, UploadFile, Form
+from fastapi import APIRouter, File, HTTPException, UploadFile, Form, Request, status, Depends
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -9,13 +9,22 @@ from typing import Annotated
 
 import src.schemas.agent as agent_schema
 from src.core.enums import Sex
+from src.core.verify import verify_id_token
 
 router = APIRouter()
 
 @router.post("/users/me/agent", response_model=agent_schema.AgentResponse)
-async def generate_agent_response(height: Annotated[float, Form(description="身長(cm)")], weight: Annotated[float, Form(description="体重(kg)")], age: Annotated[int, Form(description="年齢")], sex: Annotated[Sex, Form(description="性別")], image: UploadFile = File(..., description="料理画像")):
+async def generate_agent_response(
+    request: Request,
+    height: Annotated[float, Form(description="身長(cm)")],
+    weight: Annotated[float, Form(description="体重(kg)")],
+    age: Annotated[int, Form(description="年齢")],
+    sex: Annotated[Sex, Form(description="性別")],
+    image: UploadFile = File(..., description="料理画像"),
+    uid: str = Depends(verify_id_token)
+    ):
     """
-    エージェントに料理画像を渡し、それに関してカロリーや栄養素、アドバイスを返します。
+    エージェントに料理画像、個人の情報を渡し、それに関してカロリーや栄養素、アドバイスを返します。
     """
     load_dotenv()
 
@@ -29,7 +38,7 @@ async def generate_agent_response(height: Annotated[float, Form(description="身
             (
                 "human", 
                 [
-                    { "type": "text", "text": "画像の料理について、カロリーと栄養素を教えてください。"},
+                    { "type": "text", "text": "私の性別は{sex}で、年齢は{age}歳です。身体的情報としては、身長が{height}、体重が{weight}です。画像の料理について、カロリーと栄養素を教えてください。"},
                     { "type": "image_url", "image_url": "{image_data_uri}"}
                 ]
             )
@@ -43,7 +52,7 @@ async def generate_agent_response(height: Annotated[float, Form(description="身
     )) | prompt | llm | output_parser
 
     image_contents = await image.read()
-    base64_image = base64.b64encode(image_contents).decode("utf-8") # 画像をBase64に(Geminiに入力できる形式)
+    # base64_image = base64.b64encode(image_contents).decode("utf-8") # 画像をBase64に(Geminiに入力できる形式)
 
     mime_type = image.content_type
     if not mime_type.startswith("image/"):

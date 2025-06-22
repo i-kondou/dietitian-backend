@@ -20,7 +20,8 @@ RUN uv sync --frozen --python-preference=system
 COPY src/ /workspace/src/
 RUN uv pip install --system -e . \
 && uv pip install -qU langchain-google-genai \
-&& uv pip install -qU pillow
+&& uv pip install -qU pillow \
+&& uv pip install -qU firebase-admin
 
 EXPOSE 8080
 

@@ -26,7 +26,7 @@
     }
   ],
   "workspaceFolder": "/workspace",
-  "postAttachCommand": "sudo chown -R vscode /home/vscode/.cache/uv /home/vscode/.cache/pyright-python ${containerWorkspaceFolder}/.venv && uv venv --allow-existing .venv && uv sync && uv pip install -e '.[dev]' && uv pip install -qU langchain-google-genai && uv pip install -qU pillow",
+  "postAttachCommand": "sudo chown -R vscode /home/vscode/.cache/uv /home/vscode/.cache/pyright-python ${containerWorkspaceFolder}/.venv && uv venv --allow-existing .venv && uv sync && uv pip install -e '.[dev]' && uv pip install -qU langchain-google-genai && uv pip install -qU pillow && uv pip install -qU firebase-admin",
   "postStartCommand": "echo 'export PATH=\"/workspace/.venv/bin:$PATH\"' >> ~/.bashrc",
   "remoteUser": "vscode",
 

@@ -92,3 +92,6 @@ desktop.ini
 *.egg-info
 
 classifier/
+
+# firebase key
+dietitian-a0650-firebase-adminsdk-fbsvc-e284185991.json

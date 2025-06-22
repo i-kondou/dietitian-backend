@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     volumes:
       - ./backend/src:/workspace/src
+      - ./backend/dietitian-a0650-firebase-adminsdk-fbsvc-e284185991.json:/workspace/firebase_key.json:ro
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - FIREBASE_CREDENTIAL_PATH=${FIREBASE_CREDENTIAL_PATH}
     restart: unless-stopped

@@ -15,7 +15,6 @@ ENV UV_INSTALL_DIR=/usr/local/bin
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 COPY pyproject.toml uv.lock README.md /workspace/
-COPY secrets/ /secrets/
 RUN uv sync --frozen --python-preference=system
 
 COPY src/ /workspace/src/

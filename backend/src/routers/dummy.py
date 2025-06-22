@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File
 from pydantic import BaseModel, Field
+import random
 
 router = APIRouter()
 
@@ -55,8 +56,7 @@ class NutritionResponse(BaseModel):
     vitamin: float = Field(..., description="ビタミン")
     mineral: float = Field(..., description="ミネラル")
     sodium: float = Field(..., description="ナトリウム")
-    advice_message: str = Field(..., description="アドバイスメッセージ",
-                                default="This is a mock response. Please implement actual logic.")
+    advice_message: str = Field(..., description="アドバイスメッセージ")
 
 
 # --- APIエンドポイントの定義 ---
@@ -89,21 +89,40 @@ def nutrition_process_mock(file: UploadFile = File(...)) -> NutritionResponse:  
     )
 
 
-@router.post("/user/register", response_model=User)
-def user_register(user: User) -> User:
+@router.post("/user/register", response_model=UserInfo)
+def user_register(user: User) -> UserInfo:
     """Register a user.
 
     Args:
         user (User): ユーザー情報
 
     Returns:
-        User: 登録されたユーザー情報
+        UserInfo: 登録されたユーザー情報
 
     """
 
     if not user.id_token:
         raise ValueError()
-    return user
+    # Mock user registration logic
+    if random.random() < 0.5:
+        user_info = UserInfo(
+            id_token=user.id_token,
+            name="",
+            height=0.0,
+            weight=0.0,
+            age=0,
+            sex=""
+        )
+    else:
+        user_info = UserInfo(
+            id_token=user.id_token,
+            name="t-nagask",
+            height=170.0,
+            weight=50.0,
+            age=22,
+            sex="Male"
+        )
+    return user_info
 
 
 @router.post("/user/update", response_model=UserInfo)

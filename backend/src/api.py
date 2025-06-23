@@ -1,6 +1,7 @@
-from src.routers import profile
 from fastapi import FastAPI
+from src.routers import user
 
 app = FastAPI()
 
-app.include_router(profile.router, prefix="/profile", tags=["profile"])
+app.include_router(user.router, prefix="/user", tags=["user"])
+# app.include_router(agent.router, prefix="/agent", tags=["agent"])

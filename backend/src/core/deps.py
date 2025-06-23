@@ -8,12 +8,13 @@ bearer_scheme = HTTPBearer(auto_error=True)
 
 
 async def get_current_uid(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)  # noqa: B008
 ) -> str:
     """Get the current user's UID from the Firebase ID token.
 
     Args:
-        authorization (str): The Authorization header containing the Bearer token.
+        credentials (HTTPAuthorizationCredentials): The credentials provided by the user,
+            typically in the form of a Bearer token.
 
     Returns:
         str: The UID of the authenticated user.

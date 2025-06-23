@@ -1,10 +1,14 @@
-from fastapi import Header, HTTPException, status
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.concurrency import run_in_threadpool
 from firebase_admin import auth
 
 
+bearer_scheme = HTTPBearer(auto_error=True)
+
+
 async def get_current_uid(
-    authorization: str = Header(..., description="Bearer <Firebase ID token>")
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)
 ) -> str:
     """Get the current user's UID from the Firebase ID token.
 
@@ -15,13 +19,10 @@ async def get_current_uid(
         str: The UID of the authenticated user.
 
     """
-    scheme, _, token = authorization.partition(" ")
-    if scheme.lower() != "bearer":
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                            "Invalid auth header")
+    id_token = credentials.credentials
 
     try:
-        decoded = await run_in_threadpool(auth.verify_id_token, token)
+        decoded = await run_in_threadpool(auth.verify_id_token, id_token)
         return decoded["uid"]
     except Exception as err:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED,

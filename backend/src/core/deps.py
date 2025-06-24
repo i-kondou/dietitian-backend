@@ -1,5 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from google.cloud.firestore_v1.async_document import AsyncDocumentReference
+from src.core.firebase import db
 from starlette.concurrency import run_in_threadpool
 from firebase_admin import auth
 
@@ -28,3 +30,16 @@ async def get_current_uid(
     except Exception as err:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED,
                             f"Token verification failed: {err}") from err
+
+
+def user_doc(uid: str) -> AsyncDocumentReference:
+    """Firestore のユーザードキュメントへの参照を取得する。
+
+    Args:
+        uid (str): ユーザーの一意の識別子。
+
+    Returns:
+        AsyncDocumentReference: Firestore データベース内のユーザードキュメントへの参照。
+
+    """
+    return db.collection("users").document(uid)

@@ -1,26 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from google.cloud.firestore_v1.async_document import AsyncDocumentReference
 from google.cloud.firestore_v1.base_document import DocumentSnapshot
 from datetime import datetime, timezone
 from typing import Any, Mapping, cast
-from src.core.firebase import db
-from src.core.deps import get_current_uid
+# from src.core.firebase import db
+from src.core.deps import get_current_uid, user_doc
 from src.schemas.user import ProfileIn, ProfileOut
 
 router = APIRouter()
-
-
-def user_doc(uid: str) -> AsyncDocumentReference:
-    """Firestore のユーザードキュメントへの参照を取得する。
-
-    Args:
-        uid (str): ユーザーの一意の識別子。
-
-    Returns:
-        AsyncDocumentReference: Firestore データベース内のユーザードキュメントへの参照。
-
-    """
-    return db.collection("users").document(uid)
 
 
 @router.post("/create", response_model=ProfileOut)

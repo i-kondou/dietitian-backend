@@ -13,7 +13,8 @@ def calculate_total_nutrition(dishes: NutrientList, meal_advice: Advice) -> Meal
 
     """
 
-    menu_name = ", ".join(str(dish.dish) for dish in dishes.nutrients)
+    menu_name = ", ".join(nutrient.dish
+                          for nutrient in dishes.nutrients)
 
     meal_response = MealUploadResponse(
         menu_name=menu_name,

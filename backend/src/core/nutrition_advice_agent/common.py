@@ -5,11 +5,15 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY")
 
 vision_llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash", google_api_key=os.getenv("GOOGLE_API_KEY"))
+    model="gemini-2.5-flash",
+    google_api_key=API_KEY
+)
 text_llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash", google_api_key=os.getenv("GOOGLE_API_KEY"))
+    model="gemini-2.5-flash", google_api_key=API_KEY
+)
 
 
 def image_to_base64(image_path: str) -> str:

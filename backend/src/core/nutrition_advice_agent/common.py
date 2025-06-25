@@ -1,12 +1,15 @@
 import base64
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-vision_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-text_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+vision_llm = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash", google_api_key=os.getenv("GOOGLE_API_KEY"))
+text_llm = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash", google_api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 def image_to_base64(image_path: str) -> str:

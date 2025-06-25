@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from google.cloud.firestore_v1.base_document import DocumentSnapshot
+from google.cloud.firestore_v1.collection import CollectionReference
+from google.cloud.firestore_v1.query import Query
 from google.cloud.firestore_v1 import SERVER_TIMESTAMP
 
-from src.schemas.meal import MealUploadResponse, NutrientList, Advice, MealInput
+from src.schemas.meal import MealUploadResponse, NutrientList, Advice, MealInput, MealRecord, MealRecordList
 from src.core.deps import get_current_uid, user_doc
 from src.core.nutrition_advice_agent.step1_dish_detect import detect_dishes
 from src.core.nutrition_advice_agent.step2_nutrition import get_nutrition
@@ -75,3 +77,30 @@ async def upload_meal(image_url: str, uid: str = Depends(get_current_uid)) -> Me
     )
 
     return total_nutrition
+
+@router.get("/list", response_model=MealRecordList)
+async def list_meals_desc(uid: str = Depends(get_current_uid)) -> MealRecord:
+    """料理の画像URL、栄養情報、アドバイスの一覧を降順で取得する。
+
+    Args:
+        uid (str): ユーザーの一意の識別子。認証システムから取得される。
+
+    Returns:
+        MealRecordList: 料理の画像URL、栄養情報、アドバイスのリストを表すモデル。
+
+    Raises:
+        HTTPException: ユーザーのプロフィールが見つからない場合や、料理の検出に失敗した場合、または栄養情報が取得できなかった場合に発生。
+
+    """
+    # プロフィール取得
+    snap: DocumentSnapshot = await user_doc(uid).get()
+    if not snap.exists:
+        raise HTTPException(status_code=404, detail="User profile not found")
+
+    # 食事記録を降順で取得
+    meals_collection_ref: CollectionReference = user_doc(uid).collection("meals") # FIXME: user_doc(uid)を切り分けてawaitすべき?
+    meals_collection_query: Query = meals_collection_ref.order_by("eatenAt", direction=Query.DESCENDING)
+    meal_records = [meal_doc.to_dict()
+                    async for meal_doc in meals_collection_query.stream()]
+
+    return MealRecordList(meal_records=meal_records)

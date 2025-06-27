@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -152,3 +153,37 @@ class MealInput(BaseModel):
     mineral: float = Field(..., ge=0, description="料理のミネラル推定含有量[g]")
     sodium: float = Field(..., ge=0, description="料理の塩分推定含有量[g]")
     advice_message: str = Field(..., description="料理に関するアドバイスメッセージ")
+
+class MealRecord(MealInput):
+    """料理の画像URL、栄養情報、アドバイスを含むストレージ取り出し用モデル。
+
+    Attributes:
+        imageUrl (str): 料理の画像URL
+        menu_name (str): 料理の名前
+        calorie (float): 料理のカロリー[cal]
+        protein (float): 料理のタンパク質推定含有量[g]
+        fat (float): 料理の脂質推定含有量[g]
+        carbohydrate (float): 料理の炭水化物推定含有量[g]
+        dietary_fiber (float): 料理の食物繊維推定含有量[g]
+        vitamin (float): 料理のビタミン推定含有量[g]
+        mineral (float): 料理のミネラル推定含有量[g]
+        sodium (float): 料理の塩分推定含有量[g]
+        advice_message (str): 料理に関するアドバイスメッセージ
+        eaten_at (datetime): 料理がFirestoreに記録された時刻
+
+    """
+    eaten_at: datetime = Field(..., alias="eatenAt", description="料理がFirestoreに記録された時刻")
+
+    # aliasを有効化(Firestore上ではeatenAt、FastAPIではeaten_at)
+    model_config = {
+        "populate_by_name": True
+    }
+
+class MealRecordList(BaseModel):
+    """料理の画像URL、栄養情報、アドバイスのリストを表すモデル。
+
+    Attributes:
+        mealRecords (list[MealRecord]): 料理の画像URL、栄養情報、アドバイスのリスト
+
+    """
+    meal_records: list[MealRecord] = Field(..., description="料理の画像URL、栄養情報、アドバイスのリスト")

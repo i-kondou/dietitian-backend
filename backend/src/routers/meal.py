@@ -60,7 +60,7 @@ async def upload_meal(image_url: str, uid: str = Depends(get_current_uid)) -> Me
 
     meal_data = MealInput(
         imageUrl=image_url,
-        menu_name=str(total_nutrition.menu_name),
+        menu_name=total_nutrition.menu_name,
         calorie=total_nutrition.calorie,
         protein=total_nutrition.protein,
         fat=total_nutrition.fat,
@@ -77,6 +77,7 @@ async def upload_meal(image_url: str, uid: str = Depends(get_current_uid)) -> Me
     )
 
     return total_nutrition
+
 
 @router.get("/list", response_model=MealRecordList)
 async def list_meals_desc(uid: str = Depends(get_current_uid)) -> MealRecord:
@@ -98,8 +99,10 @@ async def list_meals_desc(uid: str = Depends(get_current_uid)) -> MealRecord:
         raise HTTPException(status_code=404, detail="User profile not found")
 
     # 食事記録を降順で取得
-    meals_collection_ref: CollectionReference = user_doc(uid).collection("meals") # FIXME: user_doc(uid)を切り分けてawaitすべき?
-    meals_collection_query: Query = meals_collection_ref.order_by("eatenAt", direction=Query.DESCENDING)
+    meals_collection_ref: CollectionReference = user_doc(
+        uid).collection("meals")  # FIXME: user_doc(uid)を切り分けてawaitすべき?
+    meals_collection_query: Query = meals_collection_ref.order_by(
+        "eatenAt", direction=Query.DESCENDING)
     meal_records = [meal_doc.to_dict()
                     async for meal_doc in meals_collection_query.stream()]
 

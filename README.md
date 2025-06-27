@@ -222,34 +222,3 @@ headers = {
 }
 ```
 
-## 🧪 開発・テスト
-
-```bash
-# コードフォーマット
-ruff format src/
-
-# リンター実行
-ruff check src/
-
-# 型チェック
-pyright src/
-```
-
-## 📝 ライセンス
-
-このプロジェクトは開発中のプロトタイプです。
-
-## 👥 作者
-
-- i-kondou (u573077g@ecs.osaka-u.ac.jp)
-
-## 🔗 関連リンク
-
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Firebase Documentation](https://firebase.google.com/docs)
-- [Google AI Studio](https://aistudio.google.com/)
-- [LangChain Documentation](https://python.langchain.com/)
-
----
-
-**注意**: このアプリケーションはプロトタイプ版です。栄養成分の推定値は参考値であり、正確な栄養管理には専門家にご相談ください。

@@ -58,15 +58,15 @@ async def upload_meal(image_url: str, uid: str = Depends(get_current_uid)) -> Me
 
     meal_data = MealInput(
         imageUrl=image_url,
-        menu_name=str(nutrition[0].dish),
-        calorie=nutrition[0].calorie,
-        protein=nutrition[0].protein,
-        fat=nutrition[0].fat,
-        carbohydrate=nutrition[0].carbohydrate,
-        dietary_fiber=nutrition[0].dietary_fiber,
-        vitamin=nutrition[0].vitamin,
-        mineral=nutrition[0].mineral,
-        sodium=nutrition[0].sodium,
+        menu_name=str(total_nutrition.menu_name),
+        calorie=total_nutrition.calorie,
+        protein=total_nutrition.protein,
+        fat=total_nutrition.fat,
+        carbohydrate=total_nutrition.carbohydrate,
+        dietary_fiber=total_nutrition.dietary_fiber,
+        vitamin=total_nutrition.vitamin,
+        mineral=total_nutrition.mineral,
+        sodium=total_nutrition.sodium,
         advice_message=advice_str,
     )
 
